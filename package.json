@@ -1,0 +1,19 @@
+{
+  "name": "beijolato.thematic-ui",
+  "version": "1.0.0",
+  "displayName": "Thematic UI",
+  "description": "Framework for UI Theme management.",
+  "unity": "2019.1",
+  "dependencies": {
+    "com.unity.textmeshpro": "2.0.1"
+  },
+  "keywords": [
+    "Theme",
+    "UI",
+    "Thematic-UI"
+  ],
+  "author": {
+    "name": "beijolato"
+  },
+  "type": "library"
+}
