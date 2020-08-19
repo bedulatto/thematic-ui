@@ -9,24 +9,22 @@ namespace ThematicUI
     public class ThemeEditor : Editor
     {
         Theme theme;
-        bool initialized;
+        bool showColorValues;
+        bool showFontValues;
+        bool showSpriteValues;
         private void OnEnable()
         {
             theme = (Theme)target;
-            if (!initialized && Application.isEditor)
-                UpdateFields();
+            GetKeys();
         }
 
-        void UpdateFields()
+        void GetKeys()
         {
-            initialized = false;
-            if (ThemeSettings.Instance == null) return;
-            theme.Colors = MountFields<ThemeColor>(ThemeSettings.Instance.Colors, theme.Colors);
-            theme.Fonts = MountFields<ThemeFont>(ThemeSettings.Instance.Fonts, theme.Fonts);
-            theme.Sprites = MountFields<ThemeSprite>(ThemeSettings.Instance.Sprites, theme.Sprites);
-            initialized = true;
+            theme.Colors = GetKeys<ColorKey>(theme.ThemeAsset.Colors, theme.Colors);
+            theme.Fonts = GetKeys<FontKey>(theme.ThemeAsset.Fonts, theme.Fonts);
+            theme.Sprites = GetKeys<SpriteKey>(theme.ThemeAsset.Sprites, theme.Sprites);
         }
-        T[] MountFields<T>(string[] keys, ThemeField[] fields) where T : ThemeField, new()
+        T[] GetKeys<T>(string[] keys, ThemeKey[] fields) where T : ThemeKey, new()
         {
             var newFields = new T[0];
             foreach (var key in keys)
@@ -49,12 +47,8 @@ namespace ThematicUI
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            if (!initialized)
-                EditorGUILayout.LabelField("You need to create a Theme Setting to set up a Theme");
-            else
-            {
-                DrawLists();
-            }
+
+            DrawLists();
 
             serializedObject.ApplyModifiedProperties();
             if (GUI.changed)
@@ -62,15 +56,27 @@ namespace ThematicUI
         }
         void DrawLists()
         {
-            DrawList(theme.Colors, "Colors");
+            showColorValues = EditorGUILayout.BeginFoldoutHeaderGroup(showColorValues, "Color Values") && theme.Colors.Length > 0;
+            EditorGUILayout.EndFoldoutHeaderGroup();
+            if (showColorValues)
+                DrawList(theme.Colors);
+
             EditorGUILayout.Space();
-            DrawList(theme.Fonts, "Fonts");
+
+            showFontValues = EditorGUILayout.BeginFoldoutHeaderGroup(showFontValues, "Font Values") && theme.Fonts.Length > 0;
+            EditorGUILayout.EndFoldoutHeaderGroup();
+            if (showFontValues)
+                DrawList(theme.Fonts);
+
             EditorGUILayout.Space();
-            DrawList(theme.Sprites, "Sprites");
+
+            showSpriteValues = EditorGUILayout.BeginFoldoutHeaderGroup(showSpriteValues, "Sprite Values") && theme.Sprites.Length > 0;
+            EditorGUILayout.EndFoldoutHeaderGroup();
+            if (showSpriteValues)
+                DrawList(theme.Sprites);
         }
-        void DrawList(ThemeField[] themeFields, string header)
+        void DrawList(ThemeKey[] themeFields)
         {
-            EditorGUILayout.LabelField(header);
             EditorGUILayout.BeginVertical(GUI.skin.box);
             for (int i = 0; i < themeFields.Length; i++)
             {

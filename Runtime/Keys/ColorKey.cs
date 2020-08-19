@@ -5,14 +5,14 @@ using UnityEngine;
 namespace ThematicUI
 {
     [System.Serializable]
-    public class ThemeSprite : ThemeField
+    public class ColorKey : ThemeKey
     {
         public override ThemeFieldType FieldType => ThemeFieldType.Color;
-        public Sprite Sprite;
+        public Color Color;
 
         protected override void DrawContent()
         {
-            Sprite = (Sprite)EditorGUILayout.ObjectField(Sprite, typeof(Sprite), true);
+           Color = EditorGUILayout.ColorField(Color);
         }
     }
 }

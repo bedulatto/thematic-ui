@@ -1,24 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+
 namespace ThematicUI
 {
-    [CreateAssetMenu(fileName = "New Theme Settings", menuName = "ThematicUI/Theme Settings")]
-    public class ThemeSettings : ScriptableObject
+    [CreateAssetMenu(fileName = "Theme Asset", menuName = "ThematicUI/Theme Asset")]
+    public class ThemeAsset : ScriptableObject
     {
-        public static ThemeSettings Instance
-        {
-            get
-            {
-                if (Instance == null)
-                    Resources.FindObjectsOfTypeAll<ThemeSettings>()[0];
-                return Instance;
-            }
-        }
-
         public string[] Colors;
         public string[] Fonts;
         public string[] Sprites;
+
+        public Theme[] Themes;
 
         public int GetColorFieldIndex(string name)
         {

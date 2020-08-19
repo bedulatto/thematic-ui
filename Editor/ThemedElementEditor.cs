@@ -10,12 +10,19 @@ namespace ThematicUI
     {
         ThemedElement element;
         bool initialized;
+        string errorLabel;
+        bool allToggle;
         string[] colorKeys;
         int selectedColorKey;
         string[] fontKeys;
         int selectedFontKey;
         string[] spriteKeys;
         int selectedSpriteKey;
+
+        bool showKeys;
+        bool showSetting;
+        bool showEvents;
+
         private void OnEnable()
         {
             element = (ThemedElement)target;
@@ -25,26 +32,60 @@ namespace ThematicUI
         public void FetchKeys()
         {
             initialized = false;
-            if (ThemeSettings.Instance == null) return;
+            var themeManager = FindObjectOfType<ThemeManager>();
+            if (!themeManager)
+            {
+                errorLabel = "Theme Manager instance needed";
+                return;
+            }
+            var asset = themeManager.ThemeAsset;
+            if (!asset)
+            {
+                errorLabel = "Theme Asset reference in Theme Manager needed";
+                return;
+            }
 
-            selectedColorKey = ThemeSettings.Instance.GetColorFieldIndex(element.colorKey);
-            colorKeys = ThemeSettings.Instance.Colors;
+            selectedColorKey = asset.GetColorFieldIndex(element.colorKey);
+            colorKeys = asset.Colors;
 
-            selectedFontKey = ThemeSettings.Instance.GetFontFieldIndex(element.fontKey);
-            fontKeys = ThemeSettings.Instance.Fonts;
+            selectedFontKey = asset.GetFontFieldIndex(element.fontKey);
+            fontKeys = asset.Fonts;
 
-            selectedSpriteKey = ThemeSettings.Instance.GetSpriteFieldIndex(element.spriteKey);
-            spriteKeys = ThemeSettings.Instance.Sprites;
+            selectedSpriteKey = asset.GetSpriteFieldIndex(element.spriteKey);
+            spriteKeys = asset.Sprites;
 
             initialized = true;
+            showKeys = true;
         }
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
             if (!initialized)
-                EditorGUILayout.LabelField("You need to create a Theme Setting to set up a Theme");
-            else
+            {
+                EditorGUILayout.LabelField(errorLabel, EditorStyles.boldLabel);
+                return;
+            }
+            showKeys = EditorGUILayout.BeginFoldoutHeaderGroup(showKeys, "Keys");
+            EditorGUILayout.EndFoldoutHeaderGroup();
+            if (showKeys)
                 DrawFields();
+
+            EditorGUILayout.Space();
+
+            showSetting = EditorGUILayout.BeginFoldoutHeaderGroup(showSetting, "Settings");
+            EditorGUILayout.EndFoldoutHeaderGroup();
+            if (showSetting)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("ForceLayoutRebuild"));
+            }
+            EditorGUILayout.Space();
+            showEvents = EditorGUILayout.BeginFoldoutHeaderGroup(showEvents, "Events");
+            EditorGUILayout.EndFoldoutHeaderGroup();
+            if (showEvents)
+            {
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("BeforeThemeChanged"));
+                EditorGUILayout.PropertyField(serializedObject.FindProperty("AfterThemeChanged"));
+            }
 
             serializedObject.ApplyModifiedProperties();
             if (GUI.changed)
@@ -53,48 +94,47 @@ namespace ThematicUI
 
         public void DrawFields()
         {
-            EditorGUILayout.BeginVertical(GUI.skin.box);
+
+            bool tempAllToggle = allToggle;
+            tempAllToggle = EditorGUILayout.Toggle("Select All", tempAllToggle);
+            if (allToggle != tempAllToggle)
+            {
+                allToggle = tempAllToggle;
+                element.changeColor = tempAllToggle;
+                element.changeFont = tempAllToggle;
+                element.changeSprite = tempAllToggle;
+            }
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Change Color", GUILayout.Width(100f));
-            element.changeColor = EditorGUILayout.Toggle(element.changeColor, GUILayout.Width(EditorGUIUtility.singleLineHeight));
+            element.changeColor = EditorGUILayout.Toggle("Set Color", element.changeColor);
             if (element.changeColor)
             {
                 selectedColorKey = EditorGUILayout.Popup(selectedColorKey, colorKeys);
                 if (selectedColorKey >= 0)
                     element.colorKey = colorKeys[selectedColorKey];
             }
+            else { allToggle = false; }
             EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.BeginVertical(GUI.skin.box);
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Change Font", GUILayout.Width(100f));
-            element.changeFont = EditorGUILayout.Toggle(element.changeFont, GUILayout.Width(EditorGUIUtility.singleLineHeight));
+            element.changeFont = EditorGUILayout.Toggle("Set Font", element.changeFont);
             if (element.changeFont)
             {
                 selectedFontKey = EditorGUILayout.Popup(selectedFontKey, fontKeys);
                 if (selectedFontKey >= 0)
                     element.fontKey = fontKeys[selectedFontKey];
             }
+            else { allToggle = false; }
             EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.Space();
-
-            EditorGUILayout.BeginVertical(GUI.skin.box);
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Change Sprite", GUILayout.Width(100f));
-            element.changeSprite = EditorGUILayout.Toggle(element.changeSprite, GUILayout.Width(EditorGUIUtility.singleLineHeight));
+            element.changeSprite = EditorGUILayout.Toggle("Set Sprite", element.changeSprite);
             if (element.changeSprite)
             {
                 selectedSpriteKey = EditorGUILayout.Popup(selectedSpriteKey, spriteKeys);
                 if (selectedSpriteKey >= 0)
                     element.spriteKey = spriteKeys[selectedSpriteKey];
             }
+            else { allToggle = false; }
             EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
+
         }
     }
 }

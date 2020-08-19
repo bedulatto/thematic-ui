@@ -4,29 +4,30 @@ using UnityEngine;
 using System.Linq;
 namespace ThematicUI
 {
-    [CreateAssetMenu(fileName = "New Theme", menuName = "ThematicUI/Theme")]
     [System.Serializable]
     public class Theme : ScriptableObject
     {
-        public ThemeColor[] Colors;
-        public ThemeFont[] Fonts;
-        public ThemeSprite[] Sprites;
+        public ThemeAsset ThemeAsset;
 
-        public ThemeColor GetColor(string colorKey)
+        public ColorKey[] Colors;
+        public FontKey[] Fonts;
+        public SpriteKey[] Sprites;
+
+        public ColorKey GetColor(string colorKey)
         {
-            int colorIndex = ThemeSettings.Instance.Colors.Select((k, i) => new { key = k, index = i }).First(ctx => ctx.key == colorKey).index;
+            int colorIndex = ThemeAsset.Colors.Select((k, i) => new { key = k, index = i }).First(ctx => ctx.key == colorKey).index;
             var color = Colors[colorIndex];
             return color;
         }
-        public ThemeFont GetFont(string fontKey)
+        public FontKey GetFont(string fontKey)
         {
-            int fontIndex = ThemeSettings.Instance.Fonts.Select((k, i) => new { key = k, index = i }).First(ctx => ctx.key == fontKey).index;
+            int fontIndex = ThemeAsset.Fonts.Select((k, i) => new { key = k, index = i }).First(ctx => ctx.key == fontKey).index;
             var font = Fonts[fontIndex];
             return font;
         }
-        public ThemeSprite GetSprite(string spriteKey)
+        public SpriteKey GetSprite(string spriteKey)
         {
-            int spriteIndex = ThemeSettings.Instance.Sprites.Select((k, i) => new { key = k, index = i }).First(ctx => ctx.key == spriteKey).index;
+            int spriteIndex = ThemeAsset.Sprites.Select((k, i) => new { key = k, index = i }).First(ctx => ctx.key == spriteKey).index;
             var sprite = Sprites[spriteIndex];
             return sprite;
         }

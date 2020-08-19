@@ -4,7 +4,7 @@ namespace ThematicUI
 {
     public enum ThemeFieldType { Color, Font, Sprite }
     [System.Serializable]
-    public abstract class ThemeField
+    public abstract class ThemeKey
     {
         public string Name;
         public abstract ThemeFieldType FieldType { get; }

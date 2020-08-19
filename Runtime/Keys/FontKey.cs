@@ -6,7 +6,7 @@ using TMPro;
 namespace ThematicUI
 {
     [System.Serializable]
-    public class ThemeFont : ThemeField
+    public class FontKey : ThemeKey
     {
         public override ThemeFieldType FieldType => ThemeFieldType.Font;
         public TMP_FontAsset Font;

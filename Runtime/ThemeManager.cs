@@ -6,17 +6,21 @@ namespace ThematicUI
 {
     public class ThemeManager : MonoBehaviour
     {
-        [SerializeField] Theme _initialTheme;
-        Dictionary<string, Theme> _themes;
-        static ThemeManager _instance;
-        public static ThemeManager Instance { get => _instance; }
-        public Theme CurrentTheme { get; private set; }
+        static ThemeManager instance;
+        public static ThemeManager Instance { get => instance; }
+
         public static Action<Theme> OnThemeChanged;
+
+        public ThemeAsset ThemeAsset;
+        public string InitialTheme;
+        Dictionary<string, Theme> themes;
+        public Theme CurrentTheme { get; private set; }
+
         private void Awake()
         {
-            if (!_instance)
-                _instance = this;
-            else if (_instance != this)
+            if (!instance)
+                instance = this;
+            else if (instance != this)
                 Destroy(gameObject);
 
             DontDestroyOnLoad(gameObject);
@@ -24,16 +28,16 @@ namespace ThematicUI
         }
         void LoadThemes()
         {
-            _themes = new Dictionary<string, Theme>();
-            var themes = Resources.FindObjectsOfTypeAll<Theme>();
-            foreach (var theme in themes)
+            themes = new Dictionary<string, Theme>();
+            var themesList = ThemeAsset.Themes;
+            foreach (var theme in themesList)
             {
-                _themes.Add(theme.name, theme);
+                themes.Add(theme.name, theme);
             }
         }
         private void Start()
         {
-            ChangeTheme(_initialTheme);
+            ChangeTheme(InitialTheme);
         }
         public void ChangeTheme(Theme newTheme)
         {
@@ -44,7 +48,7 @@ namespace ThematicUI
         }
         public void ChangeTheme(string newTheme)
         {
-            var theme = _themes[newTheme];
+            var theme = themes[newTheme];
             if (theme)
                 ChangeTheme(theme);
         }
@@ -52,7 +56,7 @@ namespace ThematicUI
         {
             bool foundNext = false;
             Theme firstTheme = null;
-            foreach (var item in _themes)
+            foreach (var item in themes)
             {
                 if (foundNext)
                 {
