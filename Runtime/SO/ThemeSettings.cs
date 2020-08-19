@@ -11,8 +11,8 @@ namespace ThematicUI
         {
             get
             {
-                if (!_instance)
-                    _instance = Resources.FindObjectsOfTypeAll<ThemeSettings>().FirstOrDefault();
+                if (!_instance) 
+                    Init();
                 return _instance;
             }
         }
@@ -20,6 +20,11 @@ namespace ThematicUI
         public string[] Fonts;
         public string[] Sprites;
 
+        [RuntimeInitializeOnLoadMethod]
+        private static void Init()
+        {
+            _instance = Resources.FindObjectsOfTypeAll<ThemeSettings>().FirstOrDefault();
+        }
         public int GetColorFieldIndex(string name)
         {
             for (int i = 0; i < Colors.Length; i++)

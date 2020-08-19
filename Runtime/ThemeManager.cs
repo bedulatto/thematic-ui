@@ -56,6 +56,7 @@ namespace ThematicUI
             {
                 if (foundNext)
                 {
+                    Debug.Log("found");
                     ChangeTheme(item.Value);
                     return;
                 }
@@ -64,6 +65,7 @@ namespace ThematicUI
                 if (CurrentTheme.name == item.Key)
                     foundNext = true;
             }
+            Debug.Log(firstTheme.name);
             ChangeTheme(firstTheme);
         }
     }
