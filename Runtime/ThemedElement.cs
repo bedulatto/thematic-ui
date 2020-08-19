@@ -26,6 +26,8 @@ namespace ThematicUI
         public ThemeEvent BeforeThemeChanged;
         public ThemeEvent AfterThemeChanged;
 
+        Theme currentTheme;
+
         RectTransform rect;
         bool initialized;
         private void Awake()
@@ -51,26 +53,30 @@ namespace ThematicUI
             if (BeforeThemeChanged != null)
                 BeforeThemeChanged.Invoke(newTheme);
 
-            if (changeColor && colorTarget)
-                colorTarget.color = newTheme.GetColor(colorKey).Color;
-
-            if (changeFont && fontTarget)
-                fontTarget.font = newTheme.GetFont(fontKey).Font;
-
-            if (changeSprite && spriteTarget)
-            {
-                spriteTarget.sprite = newTheme.GetSprite(spriteKey).Sprite;
-                if (!changeColor)
-                    spriteTarget.color = Color.white;
-            }
-
-            if (ForceLayoutRebuild)
-                LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
+            currentTheme = newTheme;
+            UpdateUI();
 
             initialized = true;
 
             if (AfterThemeChanged != null)
-                AfterThemeChanged.Invoke(newTheme);
+                AfterThemeChanged.Invoke(currentTheme);
+        }
+        public void UpdateUI()
+        {
+            if (changeColor && colorTarget)
+                colorTarget.color = currentTheme.GetColor(colorKey).Color;
+
+            if (changeFont && fontTarget)
+                fontTarget.font = currentTheme.GetFont(fontKey).Font;
+
+            if (changeSprite && spriteTarget)
+            {
+                spriteTarget.sprite = currentTheme.GetSprite(spriteKey).Sprite;
+                if (!changeColor)
+                    spriteTarget.color = Color.white;
+            }
+            if (ForceLayoutRebuild)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
         }
     }
 }
