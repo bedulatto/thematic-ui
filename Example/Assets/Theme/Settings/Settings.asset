@@ -13,16 +13,17 @@ MonoBehaviour:
   m_Name: Settings
   m_EditorClassIdentifier: 
   Colors:
-  - HeaderPanel
-  - ContentPanel
-  - BG
-  - Text
-  - Button
+  - HeaderText
+  - Header
+  - ContentText
+  - Content
   - ButtonText
+  - Button
+  - BG
   Fonts:
   - Header
   - Paragraph
   Sprites:
   - Panel
-  - Button
   - Header
+  - Button

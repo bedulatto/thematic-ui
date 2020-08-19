@@ -6,25 +6,18 @@ namespace ThematicUI
     [CreateAssetMenu(fileName = "New Theme Settings", menuName = "ThematicUI/Theme Settings")]
     public class ThemeSettings : ScriptableObject
     {
-        static ThemeSettings _instance = null;
-        public static ThemeSettings Instance
-        {
-            get
-            {
-                if (!_instance) 
-                    Init();
-                return _instance;
-            }
-        }
+        public static ThemeSettings Instance { get; private set; }
+
         public string[] Colors;
         public string[] Fonts;
         public string[] Sprites;
 
-        [RuntimeInitializeOnLoadMethod]
-        private static void Init()
+        public ThemeSettings()
         {
-            _instance = Resources.FindObjectsOfTypeAll<ThemeSettings>().FirstOrDefault();
+            if (Instance) DestroyImmediate(this, true);
+            Instance = this;
         }
+
         public int GetColorFieldIndex(string name)
         {
             for (int i = 0; i < Colors.Length; i++)

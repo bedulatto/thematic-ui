@@ -335,7 +335,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeColor: 1
-  colorKey: Text
+  colorKey: ContentText
   changeFont: 1
   fontKey: Paragraph
   changeSprite: 0
@@ -902,7 +902,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeColor: 1
-  colorKey: HeaderPanel
+  colorKey: Header
   changeFont: 0
   fontKey: 
   changeSprite: 1
@@ -1310,7 +1310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeColor: 1
-  colorKey: ContentPanel
+  colorKey: Content
   changeFont: 0
   fontKey: Header
   changeSprite: 1
@@ -1499,7 +1499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   changeColor: 1
-  colorKey: Text
+  colorKey: HeaderText
   changeFont: 1
   fontKey: Header
   changeSprite: 0
