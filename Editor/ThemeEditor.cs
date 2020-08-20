@@ -18,6 +18,7 @@ namespace ThematicUI
             theme = (Theme)target;
             GetKeys();
             rename = target.name;
+            showColorValues = showFontValues = showSpriteValues = true;
         }
         void GetKeys()
         {
@@ -50,8 +51,8 @@ namespace ThematicUI
             serializedObject.Update();
 
             EditorGUILayout.BeginHorizontal();
-            rename = EditorGUILayout.TextField("Theme Name",rename);
-            if(GUILayout.Button("Apply"))
+            rename = EditorGUILayout.TextField("Theme Name", rename);
+            if (GUILayout.Button("Apply"))
             {
                 Rename();
             }
@@ -104,14 +105,12 @@ namespace ThematicUI
         }
         void DrawList(ThemeKey[] themeFields)
         {
-            EditorGUILayout.BeginVertical(GUI.skin.box);
             for (int i = 0; i < themeFields.Length; i++)
             {
                 if (i > 0)
                     EditorGUILayout.Space();
                 themeFields[i].DrawField();
             }
-            EditorGUILayout.EndVertical();
         }
     }
 }

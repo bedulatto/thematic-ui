@@ -14,7 +14,6 @@ namespace ThematicUI
         public virtual void DrawField()
         {
             EditorGUILayout.BeginVertical();
-            EditorGUILayout.LabelField(Name);
             DrawContent();
             EditorGUILayout.EndVertical();
         }

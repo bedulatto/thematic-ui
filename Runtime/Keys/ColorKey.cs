@@ -12,7 +12,7 @@ namespace ThematicUI
 #if UNITY_EDITOR
         protected override void DrawContent()
         {
-           Color = EditorGUILayout.ColorField(Color);
+           Color = EditorGUILayout.ColorField(Name,Color);
         }
 #endif
     }

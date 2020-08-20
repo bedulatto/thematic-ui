@@ -12,7 +12,7 @@ namespace ThematicUI
 #if UNITY_EDITOR
         protected override void DrawContent()
         {
-            Sprite = (Sprite)EditorGUILayout.ObjectField(Sprite, typeof(Sprite), true);
+            Sprite = (Sprite)EditorGUILayout.ObjectField(Name, Sprite, typeof(Sprite), true);
         }
 #endif
 

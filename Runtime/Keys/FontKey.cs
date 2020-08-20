@@ -12,7 +12,7 @@ namespace ThematicUI
 #if UNITY_EDITOR
         protected override void DrawContent()
         {
-            Font = (TMP_FontAsset)EditorGUILayout.ObjectField(Font, typeof(TMP_FontAsset), true);
+            Font = (TMP_FontAsset)EditorGUILayout.ObjectField(Name,Font, typeof(TMP_FontAsset), true);
         }
 #endif
     }
