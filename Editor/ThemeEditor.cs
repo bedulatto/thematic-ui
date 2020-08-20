@@ -12,12 +12,13 @@ namespace ThematicUI
         bool showColorValues;
         bool showFontValues;
         bool showSpriteValues;
+        string rename;
         private void OnEnable()
         {
             theme = (Theme)target;
             GetKeys();
+            rename = target.name;
         }
-
         void GetKeys()
         {
             theme.Colors = GetKeys<ColorKey>(theme.ThemeAsset.Colors, theme.Colors);
@@ -48,11 +49,37 @@ namespace ThematicUI
         {
             serializedObject.Update();
 
+            EditorGUILayout.BeginHorizontal();
+            rename = EditorGUILayout.TextField("Theme Name",rename);
+            if(GUILayout.Button("Apply"))
+            {
+                Rename();
+            }
+            EditorGUILayout.EndHorizontal();
+
             DrawLists();
 
             serializedObject.ApplyModifiedProperties();
             if (GUI.changed)
                 EditorUtility.SetDirty(target);
+        }
+        void Rename()
+        {
+            string path = AssetDatabase.GetAssetPath(theme.ThemeAsset);
+            UnityEngine.Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
+            for (int i = 0; i < assets.Length; i++)
+            {
+                if (AssetDatabase.IsSubAsset(assets[i]))
+                {
+                    if (assets[i].name == target.name)
+                    {
+                        assets[i].name = rename;
+                        EditorUtility.SetDirty(assets[i]);
+                    }
+                }
+            }
+            EditorUtility.SetDirty(theme);
+            AssetDatabase.ImportAsset(path);
         }
         void DrawLists()
         {

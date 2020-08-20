@@ -148,6 +148,10 @@ namespace ThematicUI
                 EditorGUI.BeginDisabledGroup(true);
                 EditorGUILayout.ObjectField(asset.Themes[i], typeof(Theme), false);
                 EditorGUI.EndDisabledGroup();
+                if (GUILayout.Button("Duplicate"))
+                {
+                    Duplicate(asset.Themes[i]);
+                }
                 bool remove = GUILayout.Button("Remove");
                 EditorGUILayout.EndHorizontal();
                 if (remove)
@@ -163,7 +167,15 @@ namespace ThematicUI
             newThemeName = "";
 
             newTheme.ThemeAsset = asset;
-
+            AddThemeToAsset(newTheme);
+        }
+        public void Duplicate(Theme dup)
+        {
+            var newTheme = Instantiate(dup);
+            AddThemeToAsset(newTheme);
+        }
+        public void AddThemeToAsset(Theme newTheme)
+        {
             ArrayUtility.Add(ref asset.Themes, newTheme);
 
             AssetDatabase.AddObjectToAsset(newTheme, asset);

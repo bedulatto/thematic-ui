@@ -70,11 +70,7 @@ namespace ThematicUI
                 fontTarget.font = currentTheme.GetFont(fontKey).Font;
 
             if (changeSprite && spriteTarget)
-            {
                 spriteTarget.sprite = currentTheme.GetSprite(spriteKey).Sprite;
-                if (!changeColor)
-                    spriteTarget.color = Color.white;
-            }
             if (ForceLayoutRebuild)
                 LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
         }
