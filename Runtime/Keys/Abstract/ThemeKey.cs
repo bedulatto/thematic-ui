@@ -18,7 +18,7 @@ namespace ThematicUI
             DrawContent();
             EditorGUILayout.EndVertical();
         }
+#endif
         protected abstract void DrawContent();
     }
-#endif
 }
