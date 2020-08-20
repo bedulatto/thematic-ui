@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ThemeAsset: {fileID: 11400000, guid: bec51280933d7ce47b80a6154463ab9b, type: 2}
-  InitialTheme: Theme1
+  InitialTheme: Theme01
 --- !u!4 &140937879
 Transform:
   m_ObjectHideFlags: 0
