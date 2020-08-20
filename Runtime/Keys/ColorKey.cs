@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine;
+#endif
 namespace ThematicUI
 {
     [System.Serializable]
@@ -9,10 +9,11 @@ namespace ThematicUI
     {
         public override ThemeFieldType FieldType => ThemeFieldType.Color;
         public Color Color;
-
+#if UNITY_EDITOR
         protected override void DrawContent()
         {
            Color = EditorGUILayout.ColorField(Color);
         }
+#endif
     }
 }

@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
+#if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine;
-using TMPro;
+#endif
 namespace ThematicUI
 {
     [System.Serializable]
@@ -10,10 +9,11 @@ namespace ThematicUI
     {
         public override ThemeFieldType FieldType => ThemeFieldType.Font;
         public TMP_FontAsset Font;
-
+#if UNITY_EDITOR
         protected override void DrawContent()
         {
             Font = (TMP_FontAsset)EditorGUILayout.ObjectField(Font, typeof(TMP_FontAsset), true);
         }
+#endif
     }
 }
