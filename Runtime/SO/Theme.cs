@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 namespace ThematicUI
 {
     [System.Serializable]
@@ -15,21 +12,30 @@ namespace ThematicUI
 
         public ColorKey GetColor(string colorKey)
         {
-            int colorIndex = ThemeAsset.Colors.Select((k, i) => new { key = k, index = i }).First(ctx => ctx.key == colorKey).index;
-            var color = Colors[colorIndex];
-            return color;
+            int colorIndex = ThemeAsset.GetColorFieldIndex(colorKey);
+            if (colorIndex >= 0 && colorIndex < Colors.Length)
+                return Colors[colorIndex];
+
+            Debug.LogWarning($"Color key '{colorKey}' not found.");
+            return default;
         }
         public FontKey GetFont(string fontKey)
         {
-            int fontIndex = ThemeAsset.Fonts.Select((k, i) => new { key = k, index = i }).First(ctx => ctx.key == fontKey).index;
-            var font = Fonts[fontIndex];
-            return font;
+            int fontIndex = ThemeAsset.GetFontFieldIndex(fontKey);
+            if (fontIndex >= 0 && fontIndex < Fonts.Length)
+                return Fonts[fontIndex];
+
+            Debug.LogWarning($"Font key '{fontKey}' not found.");
+            return default;
         }
         public SpriteKey GetSprite(string spriteKey)
         {
-            int spriteIndex = ThemeAsset.Sprites.Select((k, i) => new { key = k, index = i }).First(ctx => ctx.key == spriteKey).index;
-            var sprite = Sprites[spriteIndex];
-            return sprite;
+            int spriteIndex = ThemeAsset.GetSpriteFieldIndex(spriteKey);
+            if (spriteIndex >= 0 && spriteIndex < Sprites.Length)
+                return Sprites[spriteIndex];
+
+            Debug.LogWarning($"Sprite key '{spriteKey}' not found.");
+            return default;
         }
     }
 }

@@ -30,6 +30,7 @@ namespace ThematicUI
 
         RectTransform rect;
         bool initialized;
+
         private void Awake()
         {
             colorTarget = GetComponent<Graphic>();
@@ -37,17 +38,21 @@ namespace ThematicUI
             spriteTarget = GetComponent<Image>();
             rect = GetComponent<RectTransform>();
         }
+
         private void OnEnable()
         {
             ThemeManager.OnThemeChanged += ChangeTheme;
-            if (!initialized && ThemeManager.Instance != null && ThemeManager.Instance.CurrentTheme != null)
+
+            if (!initialized && ThemeManager.Instance?.CurrentTheme != null)
                 ChangeTheme(ThemeManager.Instance.CurrentTheme);
         }
+
         private void OnDisable()
         {
             ThemeManager.OnThemeChanged -= ChangeTheme; 
             initialized = false;
         }
+
         void ChangeTheme(Theme newTheme)
         {
             if (BeforeThemeChanged != null)
@@ -61,6 +66,7 @@ namespace ThematicUI
             if (AfterThemeChanged != null)
                 AfterThemeChanged.Invoke(currentTheme);
         }
+
         public void UpdateUI()
         {
             if (changeColor && colorTarget)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace ThematicUI
@@ -18,14 +17,25 @@ namespace ThematicUI
 
         private void Awake()
         {
+            if (!ThemeAsset)
+            {
+                Debug.LogError("ThemeAsset is missing in the ThemeManager.");
+                enabled = false;
+                return;
+            }
+
             if (!instance)
                 instance = this;
             else if (instance != this)
+            {
                 Destroy(gameObject);
+                return;
+            }
 
             DontDestroyOnLoad(gameObject);
             LoadThemes();
         }
+
         void LoadThemes()
         {
             themes = new Dictionary<string, Theme>();
@@ -35,10 +45,12 @@ namespace ThematicUI
                 themes.Add(theme.name, theme);
             }
         }
+
         private void Start()
         {
             ChangeTheme(InitialTheme);
         }
+
         public void ChangeTheme(Theme newTheme)
         {
             if (CurrentTheme == newTheme) return;
@@ -46,12 +58,15 @@ namespace ThematicUI
             if (OnThemeChanged != null)
                 OnThemeChanged(newTheme);
         }
+
         public void ChangeTheme(string newTheme)
         {
-            var theme = themes[newTheme];
-            if (theme)
+            if (themes.TryGetValue(newTheme, out var theme))
                 ChangeTheme(theme);
+            else
+                Debug.LogWarning($"Theme '{newTheme}' não encontrado.");
         }
+
         public void ChangeToNext()
         {
             bool foundNext = false;
