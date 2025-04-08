@@ -9,34 +9,41 @@ namespace ThematicUI
     public class ThemeEvent : UnityEvent<Theme> { }
     public class ThemedElement : MonoBehaviour
     {
-        public bool changeColor;
-        public string colorKey;
-        Graphic colorTarget;
+        [SerializeField] bool changeColor;
+        [SerializeField] string colorKey;
+        [SerializeField] Graphic colorTarget;
 
-        public bool changeFont;
-        public string fontKey;
-        TextMeshProUGUI fontTarget;
+        [SerializeField] bool changeFont;
+        [SerializeField] string fontKey;
+        [SerializeField] TextMeshProUGUI fontTarget;
 
-        public bool changeSprite;
-        public string spriteKey;
-        Image spriteTarget;
+        [SerializeField] bool changeSprite;
+        [SerializeField] string spriteKey;
+        [SerializeField] Image spriteTarget;
 
-        public bool ForceLayoutRebuild;
+        [SerializeField] bool forceLayoutRebuild;
 
-        public ThemeEvent BeforeThemeChanged;
-        public ThemeEvent AfterThemeChanged;
+        [SerializeField] ThemeEvent beforeThemeChanged;
+        [SerializeField] ThemeEvent afterThemeChanged;
 
-        Theme currentTheme;
+        [SerializeField] RectTransform rect;
 
-        RectTransform rect;
         bool initialized;
+        Theme currentTheme;
 
         private void Awake()
         {
-            colorTarget = GetComponent<Graphic>();
-            fontTarget = GetComponent<TextMeshProUGUI>();
-            spriteTarget = GetComponent<Image>();
-            rect = GetComponent<RectTransform>();
+            if (!colorTarget && changeColor)
+                colorTarget = GetComponent<Graphic>();
+
+            if (!fontTarget && changeFont)
+                fontTarget = GetComponent<TextMeshProUGUI>();
+
+            if (!spriteTarget && changeSprite)
+                spriteTarget = GetComponent<Image>();
+
+            if (!rect)
+                rect = GetComponent<RectTransform>();
         }
 
         private void OnEnable()
@@ -49,22 +56,22 @@ namespace ThematicUI
 
         private void OnDisable()
         {
-            ThemeManager.OnThemeChanged -= ChangeTheme; 
+            ThemeManager.OnThemeChanged -= ChangeTheme;
             initialized = false;
         }
 
         void ChangeTheme(Theme newTheme)
         {
-            if (BeforeThemeChanged != null)
-                BeforeThemeChanged.Invoke(newTheme);
+            if (beforeThemeChanged != null)
+                beforeThemeChanged.Invoke(newTheme);
 
             currentTheme = newTheme;
             UpdateUI();
 
             initialized = true;
 
-            if (AfterThemeChanged != null)
-                AfterThemeChanged.Invoke(currentTheme);
+            if (afterThemeChanged != null)
+                afterThemeChanged.Invoke(currentTheme);
         }
 
         public void UpdateUI()
@@ -77,8 +84,32 @@ namespace ThematicUI
 
             if (changeSprite && spriteTarget)
                 spriteTarget.sprite = currentTheme.GetSprite(spriteKey).Sprite;
-            if (ForceLayoutRebuild)
-                LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
+
+            if (forceLayoutRebuild && rect)
+                ThemeManager.Instance.RegisterToRebuild(rect);
         }
+
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (Application.isPlaying || !enabled)
+                return;
+
+            if (!colorTarget && changeColor)
+                colorTarget = GetComponent<Graphic>();
+
+            if (!fontTarget && changeFont)
+                fontTarget = GetComponent<TextMeshProUGUI>();
+
+            if (!spriteTarget && changeSprite)
+                spriteTarget = GetComponent<Image>();
+
+            if (!rect)
+                rect = GetComponent<RectTransform>();
+
+            if (ThemeManager.Instance?.CurrentTheme != null)
+                ChangeTheme(ThemeManager.Instance.CurrentTheme);
+        }
+#endif
     }
 }

@@ -1,51 +1,61 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
+
 namespace ThematicUI
 {
     [CustomEditor(typeof(ThemeManager))]
     public class ThemeManagerEditor : Editor
     {
-        ThemeManager manager;
+        SerializedProperty themeAssetProp;
+        SerializedProperty initialThemeProp;
+
         string[] themes;
-        ThemeAsset newAsset;
         int selectedInitialTheme;
+
         private void OnEnable()
         {
-            manager = (ThemeManager)target;
+            themeAssetProp = serializedObject.FindProperty("themeAsset");
+            initialThemeProp = serializedObject.FindProperty("initialTheme");
             FetchThemes();
         }
-        public void FetchThemes()
+
+        void FetchThemes()
         {
             themes = new string[0];
-            if (manager.ThemeAsset != null)
-                for (int i = 0; i < manager.ThemeAsset.Themes.Length; i++)
+            selectedInitialTheme = 0;
+
+            if (themeAssetProp.objectReferenceValue is ThemeAsset asset && asset.Themes != null)
+            {
+                themes = new string[asset.Themes.Length];
+                for (int i = 0; i < asset.Themes.Length; i++)
                 {
-                    ArrayUtility.Add(ref themes, manager.ThemeAsset.Themes[i].name);
-                    if (manager.InitialTheme == manager.ThemeAsset.Themes[i].name)
+                    themes[i] = asset.Themes[i].name;
+                    if (initialThemeProp.stringValue == themes[i])
                         selectedInitialTheme = i;
                 }
+            }
         }
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            newAsset = manager.ThemeAsset;
-            newAsset = (ThemeAsset)EditorGUILayout.ObjectField(newAsset, typeof(ThemeAsset), false);
-            if (newAsset != manager.ThemeAsset)
+
+            EditorGUILayout.PropertyField(themeAssetProp);
+
+            if (themeAssetProp.objectReferenceValue is ThemeAsset asset && asset.Themes != null && asset.Themes.Length > 0)
             {
-                manager.ThemeAsset = newAsset;
                 FetchThemes();
-                GUI.changed = true;
+                selectedInitialTheme = EditorGUILayout.Popup("Initial Theme", selectedInitialTheme, themes);
+                if (selectedInitialTheme >= 0 && selectedInitialTheme < themes.Length)
+                    initialThemeProp.stringValue = themes[selectedInitialTheme];
             }
-            if (themes != null && themes.Length > 0)
+            else
             {
-                selectedInitialTheme = EditorGUILayout.Popup("Initial Theme",selectedInitialTheme, themes);
-                if (selectedInitialTheme >= 0)
-                    manager.InitialTheme = themes[selectedInitialTheme];
+                EditorGUILayout.HelpBox("No themes defined in the ThemeAsset.", MessageType.Info);
             }
 
             serializedObject.ApplyModifiedProperties();
+
             if (GUI.changed)
                 EditorUtility.SetDirty(target);
         }

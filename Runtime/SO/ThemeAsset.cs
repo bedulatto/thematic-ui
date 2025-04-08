@@ -18,8 +18,10 @@ namespace ThematicUI
                 if (name == Colors[i])
                     return i;
             }
+
             return -1;
         }
+
         public int GetFontFieldIndex(string name)
         {
             for (int i = 0; i < Fonts.Length; i++)
@@ -27,8 +29,10 @@ namespace ThematicUI
                 if (name == Fonts[i])
                     return i;
             }
+
             return -1;
         }
+
         public int GetSpriteFieldIndex(string name)
         {
             for (int i = 0; i < Sprites.Length; i++)
@@ -36,6 +40,7 @@ namespace ThematicUI
                 if (name == Sprites[i])
                     return i;
             }
+
             return -1;
         }
     }

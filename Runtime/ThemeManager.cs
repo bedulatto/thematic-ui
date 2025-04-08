@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 namespace ThematicUI
 {
     public class ThemeManager : MonoBehaviour
@@ -10,14 +12,17 @@ namespace ThematicUI
 
         public static Action<Theme> OnThemeChanged;
 
-        public ThemeAsset ThemeAsset;
-        public string InitialTheme;
+        [SerializeField] ThemeAsset themeAsset;
+        [SerializeField] string initialTheme;
+
         Dictionary<string, Theme> themes;
+        HashSet<RectTransform> elementsToRebuild = new HashSet<RectTransform>();
+
         public Theme CurrentTheme { get; private set; }
 
         private void Awake()
         {
-            if (!ThemeAsset)
+            if (!themeAsset)
             {
                 Debug.LogError("ThemeAsset is missing in the ThemeManager.");
                 enabled = false;
@@ -36,10 +41,27 @@ namespace ThematicUI
             LoadThemes();
         }
 
+        void LateUpdate()
+        {
+            foreach (var rect in elementsToRebuild)
+            {
+                if (rect)
+                    LayoutRebuilder.ForceRebuildLayoutImmediate(rect);
+            }
+
+            elementsToRebuild.Clear();
+        }
+
+        public  void RegisterToRebuild(RectTransform rect)
+        {
+            if (rect && !elementsToRebuild.Contains(rect))
+                elementsToRebuild.Add(rect);
+        }
+
         void LoadThemes()
         {
             themes = new Dictionary<string, Theme>();
-            var themesList = ThemeAsset.Themes;
+            var themesList = themeAsset.Themes;
             foreach (var theme in themesList)
             {
                 themes.Add(theme.name, theme);
@@ -48,7 +70,7 @@ namespace ThematicUI
 
         private void Start()
         {
-            ChangeTheme(InitialTheme);
+            ChangeTheme(initialTheme);
         }
 
         public void ChangeTheme(Theme newTheme)
