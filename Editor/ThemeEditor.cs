@@ -9,6 +9,10 @@ namespace ThematicUI
         private Theme theme;
         private string rename;
 
+        private GUIStyle headerStyle;
+        private GUIStyle containerStyle;
+        private bool stylesInitialized = false;
+
         private void OnEnable()
         {
             theme = (Theme)target;
@@ -17,16 +21,29 @@ namespace ThematicUI
 
         public override void OnInspectorGUI()
         {
+            if (!stylesInitialized)
+            {
+                headerStyle = new GUIStyle(EditorStyles.boldLabel)
+                {
+                    fontSize = 13,
+                    normal = { textColor = new Color(0.8f, 0.9f, 1f) }
+                };
+
+                containerStyle = new GUIStyle(GUI.skin.box)
+                {
+                    margin = new RectOffset(0, 0, 10, 10),
+                    padding = new RectOffset(10, 10, 5, 5)
+                };
+
+                stylesInitialized = true;
+            }
+
             serializedObject.Update();
 
-            EditorGUILayout.BeginHorizontal();
-            rename = EditorGUILayout.TextField("Theme Name", rename);
-            if (GUILayout.Button("Apply"))
-            {
-                Rename();
-            }
-            EditorGUILayout.EndHorizontal();
+            DrawHeader("🎭 Theme Editor", 16);
+            DrawRenameSection();
 
+            EditorGUILayout.Space(10);
             DrawThemeKeyList();
 
             serializedObject.ApplyModifiedProperties();
@@ -34,8 +51,38 @@ namespace ThematicUI
             if (GUI.changed)
             {
                 EditorUtility.SetDirty(target);
-                AssetDatabase.SaveAssets(); 
+                AssetDatabase.SaveAssets();
             }
+        }
+
+        private void DrawHeader(string title, int fontSize = 14)
+        {
+            GUIStyle style = new(EditorStyles.boldLabel)
+            {
+                fontSize = fontSize,
+                normal = { textColor = Color.white }
+            };
+            EditorGUILayout.LabelField(title, style);
+            EditorGUILayout.Space(4);
+        }
+
+        private void DrawRenameSection()
+        {
+            EditorGUILayout.BeginVertical(containerStyle);
+            EditorGUILayout.LabelField("✏️ Rename Theme", EditorStyles.miniBoldLabel);
+
+            EditorGUILayout.BeginHorizontal();
+            rename = EditorGUILayout.TextField("Theme Name", rename);
+
+            GUI.backgroundColor = new Color(0.4f, 0.8f, 1f);
+            if (GUILayout.Button("Apply", GUILayout.Width(80)))
+            {
+                Rename();
+            }
+            GUI.backgroundColor = Color.white;
+
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
         }
 
         private void Rename()
@@ -56,17 +103,23 @@ namespace ThematicUI
 
         private void DrawThemeKeyList()
         {
+            EditorGUILayout.BeginVertical(containerStyle);
+            EditorGUILayout.LabelField("🎯 Key Values", EditorStyles.miniBoldLabel);
+
             if (theme.Keys == null || theme.Keys.Count == 0)
             {
                 EditorGUILayout.HelpBox("No theme keys defined for this theme.", MessageType.Info);
-                return;
+            }
+            else
+            {
+                foreach (var key in theme.Keys)
+                {
+                    EditorGUILayout.Space(4);
+                    key.DrawField();
+                }
             }
 
-            foreach (var key in theme.Keys)
-            {
-                EditorGUILayout.Space();
-                key.DrawField();
-            }
+            EditorGUILayout.EndVertical();
         }
     }
 }

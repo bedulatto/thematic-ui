@@ -13,7 +13,7 @@ namespace ThematicUI
 #if UNITY_EDITOR
         public override void DrawField()
         {
-            Value = EditorGUILayout.ObjectField("Texture", Value, typeof(Texture), false) as Texture;
+            Value = EditorGUILayout.ObjectField(Name, Value, typeof(Texture), false) as Texture;
         }
 #endif
     }

@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  fontKey: FontBody
+  fontKey: Body
   target: {fileID: 231698094}
 --- !u!114 &231698097
 MonoBehaviour:
@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  colorKey: ColorBodyText
+  colorKey: BodyText
   target: {fileID: 231698094}
 --- !u!1 &588614225
 GameObject:
@@ -353,8 +353,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Change!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 62d2e5bdd9c24fc46a56b961e7f7e9b2, type: 2}
-  m_sharedMaterial: {fileID: 430297095679521135, guid: 62d2e5bdd9c24fc46a56b961e7f7e9b2,
+  m_fontAsset: {fileID: 11400000, guid: 0ad11aca50b63134da3542c47777f9b0, type: 2}
+  m_sharedMaterial: {fileID: -4345115678194338425, guid: 0ad11aca50b63134da3542c47777f9b0,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -379,7 +379,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.9
+  m_fontSize: 28.15
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -442,7 +442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  fontKey: FontBody
+  fontKey: Header
   target: {fileID: 588614227}
 --- !u!114 &588614230
 MonoBehaviour:
@@ -457,7 +457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  colorKey: ColorHeaderText
+  colorKey: HeaderText
   target: {fileID: 588614227}
 --- !u!1 &691606753
 GameObject:
@@ -608,7 +608,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  spriteKey: SpriteButton
+  spriteKey: Button
   spriteTarget: {fileID: 691606756}
 --- !u!114 &691606760
 MonoBehaviour:
@@ -623,7 +623,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  colorKey: ColorButton
+  colorKey: Button
   target: {fileID: 691606756}
 --- !u!1 &694558082
 GameObject:
@@ -679,7 +679,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8745098, g: 0.89411765, b: 0.91764706, a: 1}
+  m_Color: {r: 0.94509804, g: 0.9490196, b: 0.9647059, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -717,7 +717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  spriteKey: SpriteBG
+  spriteKey: BG
   spriteTarget: {fileID: 694558085}
 --- !u!114 &694558088
 MonoBehaviour:
@@ -732,7 +732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  colorKey: ColorBG
+  colorKey: BG
   target: {fileID: 694558085}
 --- !u!1 &705507993
 GameObject:
@@ -882,7 +882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.80784315, g: 0.8392157, b: 0.8784314, a: 1}
+  m_Color: {r: 0.94509804, g: 0.9490196, b: 0.9647059, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -920,7 +920,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  spriteKey: SpritePanel
+  spriteKey: Panel
   spriteTarget: {fileID: 760859183}
 --- !u!114 &760859186
 MonoBehaviour:
@@ -935,7 +935,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  colorKey: ColorHeader
+  colorKey: Header
   target: {fileID: 760859183}
 --- !u!1 &963194225
 GameObject:
@@ -1388,7 +1388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  colorKey: ColorPanel
+  colorKey: Panel
   target: {fileID: 2007409399}
 --- !u!114 &2007409405
 MonoBehaviour:
@@ -1403,7 +1403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  spriteKey: SpritePanel
+  spriteKey: Panel
   spriteTarget: {fileID: 2007409399}
 --- !u!1 &2068772223
 GameObject:
@@ -1556,7 +1556,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  colorKey: ColorHeaderText
+  colorKey: HeaderText
   target: {fileID: 2068772225}
 --- !u!114 &2068772228
 MonoBehaviour:
@@ -1571,5 +1571,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeAsset: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-  fontKey: FontHeader
+  fontKey: Header
   target: {fileID: 2068772225}

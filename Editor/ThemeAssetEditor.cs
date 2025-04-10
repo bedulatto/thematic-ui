@@ -10,13 +10,18 @@ namespace ThematicUI
     public class ThemeAssetEditor : Editor
     {
         ThemeAsset asset;
-        string newThemeName;
+        string newThemeName = "NewTheme";
         int selectedCurrentThemeIndex = -1;
         ThemeFieldType newKeyType = ThemeFieldType.Color;
         string newKeyName = "NewKey";
 
         Dictionary<int, string> editingOriginalNames = new();
         HashSet<int> editingIndices = new();
+        Dictionary<ThemeFieldType, bool> foldoutStates = new();
+
+        GUIStyle titleStyle;
+        GUIStyle separatorStyle;
+        bool initializedStyles = false;
 
         private void OnEnable()
         {
@@ -27,30 +32,54 @@ namespace ThematicUI
 
         public override void OnInspectorGUI()
         {
+            if (!initializedStyles)
+            {
+                titleStyle = new GUIStyle(EditorStyles.boldLabel)
+                {
+                    fontSize = 13,
+                    normal = { textColor = new Color(0.8f, 0.9f, 1f) }
+                };
+
+                separatorStyle = new GUIStyle(GUI.skin.box)
+                {
+                    margin = new RectOffset(0, 0, 10, 10),
+                    padding = new RectOffset(10, 10, 5, 5)
+                };
+
+                initializedStyles = true;
+            }
+
             serializedObject.Update();
 
-            DrawHeader("Theme Configuration");
-            DrawThemeSelectors();
+            DrawHeader("🎨 Theme Configuration", 18);
+            DrawThemeSection();
 
             EditorGUILayout.Space(10);
             DrawKeySection();
 
             EditorGUILayout.Space(10);
-            DrawThemeSection();
+            DrawThemeSelectors();
 
             serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(target);
         }
 
-        void DrawHeader(string title)
+        void DrawHeader(string title, int fontSize = 14)
         {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField(title, EditorStyles.boldLabel);
+            GUIStyle style = new(EditorStyles.boldLabel)
+            {
+                fontSize = fontSize,
+                normal = { textColor = Color.white }
+            };
+            EditorGUILayout.LabelField(title, style);
+            EditorGUILayout.Space(4);
         }
 
         void DrawThemeSelectors()
         {
-            EditorGUILayout.BeginVertical("box");
+            EditorGUILayout.BeginVertical(separatorStyle);
+
+            DrawHeader("🌈 Current Theme", 12);
 
             if (asset.Themes == null || asset.Themes.Length == 0)
             {
@@ -72,22 +101,24 @@ namespace ThematicUI
             if (selectedCurrentThemeIndex < 0)
                 selectedCurrentThemeIndex = currentIndex < 0 ? 0 : currentIndex;
 
-            selectedCurrentThemeIndex = EditorGUILayout.Popup("Current Theme", selectedCurrentThemeIndex, themeNames);
+            selectedCurrentThemeIndex = EditorGUILayout.Popup("Select Theme", selectedCurrentThemeIndex, themeNames);
 
+            GUI.backgroundColor = Color.green;
             if (GUILayout.Button("Apply Current Theme"))
             {
                 var selected = asset.Themes[selectedCurrentThemeIndex];
                 asset.ChangeTheme(selected);
                 EditorUtility.SetDirty(asset);
             }
+            GUI.backgroundColor = Color.white;
 
             EditorGUILayout.EndVertical();
         }
 
         void DrawKeySection()
         {
-            EditorGUILayout.BeginVertical("box");
-            DrawHeader("Key References");
+            EditorGUILayout.BeginVertical(separatorStyle);
+            DrawHeader("🗝️ Key References", 12);
 
             if (asset.KeyReferences == null || asset.KeyReferences.Count == 0)
             {
@@ -95,72 +126,100 @@ namespace ThematicUI
             }
             else
             {
-                for (int i = 0; i < asset.KeyReferences.Count; i++)
+                var groupedKeys = asset.KeyReferences
+                    .Select((refKey, index) => new { refKey, index })
+                    .GroupBy(k => k.refKey.Type);
+
+                foreach (var group in groupedKeys)
                 {
-                    var keyRef = asset.KeyReferences[i];
-                    EditorGUILayout.BeginHorizontal();
-                    bool isEditing = editingIndices.Contains(i);
+                    if (!foldoutStates.ContainsKey(group.Key))
+                        foldoutStates[group.Key] = true;
 
-                    if (isEditing)
+                    foldoutStates[group.Key] = EditorGUILayout.Foldout(foldoutStates[group.Key], $"▶ {group.Key}", true);
+
+                    if (foldoutStates[group.Key])
                     {
-                        if (!editingOriginalNames.ContainsKey(i))
-                            editingOriginalNames[i] = keyRef.Name;
-
-                        keyRef.Name = EditorGUILayout.TextField(keyRef.Name);
-                        keyRef.Type = (ThemeFieldType)EditorGUILayout.EnumPopup(keyRef.Type);
-
-                        if (GUILayout.Button("Save", GUILayout.Width(60)))
+                        EditorGUI.indentLevel++;
+                        foreach (var item in group)
                         {
-                            editingIndices.Remove(i);
-                            editingOriginalNames.Remove(i);
-                            asset.SyncAllThemesWithReferences();
-                        }
+                            var keyRef = item.refKey;
+                            int i = item.index;
 
-                        if (GUILayout.Button("Discard", GUILayout.Width(80)))
-                        {
-                            keyRef.Name = editingOriginalNames[i];
-                            editingIndices.Remove(i);
-                            editingOriginalNames.Remove(i);
-                            GUI.FocusControl(null);
-                        }
-                    }
-                    else
-                    {
-                        EditorGUI.BeginDisabledGroup(true);
-                        EditorGUILayout.TextField(keyRef.Name);
-                        EditorGUILayout.EnumPopup(keyRef.Type);
-                        EditorGUI.EndDisabledGroup();
+                            EditorGUILayout.BeginHorizontal();
+                            bool isEditing = editingIndices.Contains(i);
 
-                        if (GUILayout.Button("Edit", GUILayout.Width(60)))
-                        {
-                            editingIndices.Add(i);
-                        }
-
-                        if (GUILayout.Button("Remove", GUILayout.Width(80)))
-                        {
-                            if (EditorUtility.DisplayDialog("Confirm Removal", $"Are you sure you want to remove the key '{keyRef.Name}'?", "Remove", "Cancel"))
+                            if (isEditing)
                             {
-                                asset.KeyReferences.RemoveAt(i);
-                                asset.SyncAllThemesWithReferences();
-                                break;
+                                if (!editingOriginalNames.ContainsKey(i))
+                                    editingOriginalNames[i] = keyRef.Name;
+
+                                keyRef.Name = EditorGUILayout.TextField(keyRef.Name);
+                                keyRef.Type = (ThemeFieldType)EditorGUILayout.EnumPopup(keyRef.Type);
+
+                                GUI.backgroundColor = new Color(0.2f, 0.8f, 0.2f);
+                                if (GUILayout.Button("Save", GUILayout.Width(60)))
+                                {
+                                    editingIndices.Remove(i);
+                                    editingOriginalNames.Remove(i);
+                                    SyncAllThemesWithReferences(asset);
+                                }
+
+                                GUI.backgroundColor = new Color(1f, 0.5f, 0.3f);
+                                if (GUILayout.Button("Discard", GUILayout.Width(80)))
+                                {
+                                    keyRef.Name = editingOriginalNames[i];
+                                    editingIndices.Remove(i);
+                                    editingOriginalNames.Remove(i);
+                                    GUI.FocusControl(null);
+                                }
+
+                                GUI.backgroundColor = Color.white;
                             }
+                            else
+                            {
+                                EditorGUI.BeginDisabledGroup(true);
+                                EditorGUILayout.TextField(keyRef.Name);
+                                EditorGUILayout.EnumPopup(keyRef.Type);
+                                EditorGUI.EndDisabledGroup();
+
+                                GUI.backgroundColor = new Color(0.4f, 0.6f, 1f);
+                                if (GUILayout.Button("Edit", GUILayout.Width(60)))
+                                    editingIndices.Add(i);
+
+                                GUI.backgroundColor = new Color(1f, 0.4f, 0.4f);
+                                if (GUILayout.Button("Remove", GUILayout.Width(80)))
+                                {
+                                    if (EditorUtility.DisplayDialog("Confirm Removal", $"Are you sure you want to remove the key '{keyRef.Name}'?", "Remove", "Cancel"))
+                                    {
+                                        asset.KeyReferences.RemoveAt(i);
+                                        SyncAllThemesWithReferences(asset);
+                                        break;
+                                    }
+                                }
+
+                                GUI.backgroundColor = Color.white;
+                            }
+                            EditorGUILayout.EndHorizontal();
                         }
+                        EditorGUI.indentLevel--;
                     }
-                    EditorGUILayout.EndHorizontal();
+
+                    EditorGUILayout.Space(5);
                 }
             }
 
-            EditorGUILayout.Space(5);
+            EditorGUILayout.Space(10);
             DrawAddKeyField();
             EditorGUILayout.EndVertical();
         }
 
         void DrawAddKeyField()
         {
-            EditorGUILayout.LabelField("Add New Key Reference", EditorStyles.miniBoldLabel);
+            EditorGUILayout.LabelField("➕ Add New Key Reference", EditorStyles.miniBoldLabel);
             newKeyName = EditorGUILayout.TextField("Key Name", newKeyName);
             newKeyType = (ThemeFieldType)EditorGUILayout.EnumPopup("Key Type", newKeyType);
 
+            GUI.backgroundColor = new Color(0.6f, 1f, 0.6f);
             if (GUILayout.Button("Add Key Reference"))
             {
                 if (!string.IsNullOrEmpty(newKeyName))
@@ -168,15 +227,16 @@ namespace ThematicUI
                     asset.KeyReferences.Add(new ThemeKeyReference { Name = newKeyName, Type = newKeyType });
                     newKeyName = "NewKey";
                     EditorUtility.SetDirty(asset);
-                    asset.SyncAllThemesWithReferences();
+                    SyncAllThemesWithReferences(asset);
                 }
             }
+            GUI.backgroundColor = Color.white;
         }
 
         void DrawThemeSection()
         {
-            EditorGUILayout.BeginVertical("box");
-            DrawHeader("Registered Themes");
+            EditorGUILayout.BeginVertical(separatorStyle);
+            DrawHeader("📁 Registered Themes", 12);
 
             if (asset.Themes == null || asset.Themes.Length == 0)
             {
@@ -191,6 +251,7 @@ namespace ThematicUI
                     EditorGUILayout.ObjectField(theme, typeof(Theme), false);
                     EditorGUI.EndDisabledGroup();
 
+                    GUI.backgroundColor = new Color(1f, 0.4f, 0.4f);
                     if (GUILayout.Button("Remove", GUILayout.Width(80)))
                     {
                         if (EditorUtility.DisplayDialog("Confirm Theme Removal", $"Are you sure you want to remove the theme '{theme.name}'?", "Remove", "Cancel"))
@@ -202,6 +263,8 @@ namespace ThematicUI
                             break;
                         }
                     }
+                    GUI.backgroundColor = Color.white;
+
                     EditorGUILayout.EndHorizontal();
                 }
             }
@@ -213,10 +276,15 @@ namespace ThematicUI
 
         void DrawAddThemeField()
         {
-            EditorGUILayout.LabelField("Add New Theme", EditorStyles.miniBoldLabel);
+            EditorGUILayout.LabelField("➕ Add New Theme", EditorStyles.miniBoldLabel);
             newThemeName = EditorGUILayout.TextField("Theme Name", newThemeName);
+
+            GUI.backgroundColor = new Color(0.6f, 1f, 0.6f);
             if (GUILayout.Button("Add Theme"))
-                CreateTheme();
+            {
+                CreateTheme(); newThemeName = "NewTheme";
+            }
+            GUI.backgroundColor = Color.white;
         }
 
         void CreateTheme()
@@ -234,7 +302,50 @@ namespace ThematicUI
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            asset.SyncAllThemesWithReferences();
+            SyncAllThemesWithReferences(asset);
+        }
+
+        public static void SyncAllThemesWithReferences(ThemeAsset asset)
+        {
+            if (asset.Themes == null) return;
+
+            string assetPath = AssetDatabase.GetAssetPath(asset);
+            string directory = Path.GetDirectoryName(assetPath);
+
+            foreach (var theme in asset.Themes)
+            {
+                if (theme == null) continue;
+
+                theme.Keys.RemoveAll(k =>
+                    !asset.KeyReferences.Any(r => r.Name == k.Name && r.Type == k.FieldType));
+
+                foreach (var refKey in asset.KeyReferences)
+                {
+                    if (!theme.Keys.Any(k => k.Name == refKey.Name && k.FieldType == refKey.Type))
+                    {
+                        ThemeKey newKey = refKey.Type switch
+                        {
+                            ThemeFieldType.Color => new ColorKey(),
+                            ThemeFieldType.Font => new FontKey(),
+                            ThemeFieldType.Sprite => new SpriteKey(),
+                            _ => null
+                        };
+
+                        if (newKey != null)
+                        {
+                            newKey.Name = refKey.Name;
+                            newKey.FieldType = refKey.Type;
+                            theme.Keys.Add(newKey);
+                        }
+                    }
+                }
+
+                EditorUtility.SetDirty(theme);
+            }
+
+            EditorUtility.SetDirty(asset);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
     }
 }

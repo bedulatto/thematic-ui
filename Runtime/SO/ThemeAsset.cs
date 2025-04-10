@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using UnityEngine;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
 namespace ThematicUI
@@ -65,48 +63,5 @@ namespace ThematicUI
 
             ChangeTheme(firstTheme);
         }
-
-#if UNITY_EDITOR
-        public void SyncAllThemesWithReferences()
-        {
-            if (Themes == null) return;
-
-            string assetPath = AssetDatabase.GetAssetPath(this);
-            string directory = Path.GetDirectoryName(assetPath);
-
-            foreach (var theme in Themes)
-            {
-                if (theme == null) continue;
-
-                // Remove chaves obsoletas
-                theme.Keys.RemoveAll(k => !KeyReferences.Any(r => r.Name == k.Name && r.Type == k.FieldType));
-
-                // Adiciona chaves novas
-                foreach (var refKey in KeyReferences)
-                {
-                    if (!theme.Keys.Any(k => k.Name == refKey.Name && k.FieldType == refKey.Type))
-                    {
-                        ThemeKey newKey = refKey.Type switch
-                        {
-                            ThemeFieldType.Color => new ColorKey(),
-                            ThemeFieldType.Font => new FontKey(),
-                            ThemeFieldType.Sprite => new SpriteKey(),
-                            _ => null
-                        };
-
-                        if (newKey != null)
-                        {
-                            newKey.Name = refKey.Name;
-                            newKey.FieldType = refKey.Type;
-                            theme.Keys.Add(newKey);
-                        }
-                    }
-                }
-
-                EditorUtility.SetDirty(theme);
-            }
-            AssetDatabase.SaveAssets();
-        }
-#endif
     }
 }

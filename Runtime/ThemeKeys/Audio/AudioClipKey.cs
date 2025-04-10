@@ -13,7 +13,7 @@ namespace ThematicUI
 #if UNITY_EDITOR
         public override void DrawField()
         {
-            Value = EditorGUILayout.ObjectField("Audio Clip", Value, typeof(AudioClip), false) as AudioClip;
+            Value = EditorGUILayout.ObjectField(Name, Value, typeof(AudioClip), false) as AudioClip;
         }
 #endif
     }

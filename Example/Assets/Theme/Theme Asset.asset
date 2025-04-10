@@ -13,27 +13,27 @@ MonoBehaviour:
   m_Name: Theme Asset
   m_EditorClassIdentifier: 
   KeyReferences:
-  - Name: ColorBG
+  - Name: BG
     Type: 0
-  - Name: ColorPanel
+  - Name: Panel
     Type: 0
-  - Name: ColorHeader
+  - Name: Header
     Type: 0
-  - Name: ColorButton
+  - Name: Button
     Type: 0
-  - Name: ColorBodyText
+  - Name: BodyText
     Type: 0
-  - Name: ColorHeaderText
+  - Name: HeaderText
     Type: 0
-  - Name: FontHeader
+  - Name: Header
     Type: 1
-  - Name: FontBody
+  - Name: Body
     Type: 1
-  - Name: SpriteBG
+  - Name: BG
     Type: 2
-  - Name: SpritePanel
+  - Name: Panel
     Type: 2
-  - Name: SpriteButton
+  - Name: Button
     Type: 2
   Themes:
   - {fileID: 5955973097012507014}
@@ -52,84 +52,84 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ThemeAsset: {fileID: 11400000}
   Keys:
-  - rid: 4729522007312171008
-  - rid: 4729522007312171009
-  - rid: 4729522007312171010
-  - rid: 4729522007312171011
-  - rid: 4729522007312171012
-  - rid: 4729522007312171013
-  - rid: 4729522007312171014
-  - rid: 4729522007312171015
-  - rid: 4729522007312171016
-  - rid: 4729522007312171017
-  - rid: 4729522007312171018
+  - rid: 4729522007312171032
+  - rid: 4729522007312171034
+  - rid: 4729522007312171036
+  - rid: 4729522007312171038
+  - rid: 4729522007312171040
+  - rid: 4729522007312171042
+  - rid: 4729522007312171044
+  - rid: 4729522007312171046
+  - rid: 4729522007312171048
+  - rid: 4729522007312171050
+  - rid: 4729522007312171052
   references:
     version: 2
     RefIds:
-    - rid: 4729522007312171008
+    - rid: 4729522007312171032
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorBG
+        Name: BG
         FieldType: 0
         Value: {r: 0.18431373, g: 0.20784314, b: 0.25882354, a: 1}
-    - rid: 4729522007312171009
+    - rid: 4729522007312171034
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorPanel
+        Name: Panel
         FieldType: 0
         Value: {r: 0.34117648, g: 0.3764706, b: 0.43529412, a: 1}
-    - rid: 4729522007312171010
+    - rid: 4729522007312171036
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorHeader
+        Name: Header
         FieldType: 0
         Value: {r: 0.45490196, g: 0.49019608, b: 0.54901963, a: 1}
-    - rid: 4729522007312171011
+    - rid: 4729522007312171038
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorButton
+        Name: Button
         FieldType: 0
         Value: {r: 0.3254902, g: 0.32156864, b: 0.92941177, a: 1}
-    - rid: 4729522007312171012
+    - rid: 4729522007312171040
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorBodyText
+        Name: BodyText
         FieldType: 0
         Value: {r: 1, g: 1, b: 1, a: 1}
-    - rid: 4729522007312171013
+    - rid: 4729522007312171042
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorHeaderText
+        Name: HeaderText
         FieldType: 0
         Value: {r: 1, g: 1, b: 1, a: 1}
-    - rid: 4729522007312171014
+    - rid: 4729522007312171044
       type: {class: FontKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: FontHeader
+        Name: Header
         FieldType: 1
         Value: {fileID: 11400000, guid: 84c453dfefcc7c94ea07c5813863ea96, type: 2}
-    - rid: 4729522007312171015
+    - rid: 4729522007312171046
       type: {class: FontKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: FontBody
+        Name: Body
         FieldType: 1
         Value: {fileID: 11400000, guid: 4f61433bffceb884dbb69e1d3c3229f9, type: 2}
-    - rid: 4729522007312171016
+    - rid: 4729522007312171048
       type: {class: SpriteKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: SpriteBG
+        Name: BG
         FieldType: 2
         Value: {fileID: 21300000, guid: 36c3fbb0edf10874d871d6f04f63eb5d, type: 3}
-    - rid: 4729522007312171017
+    - rid: 4729522007312171050
       type: {class: SpriteKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: SpritePanel
+        Name: Panel
         FieldType: 2
         Value: {fileID: 21300000, guid: 2773602edae59694d957d56981ea6fa4, type: 3}
-    - rid: 4729522007312171018
+    - rid: 4729522007312171052
       type: {class: SpriteKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: SpriteButton
+        Name: Button
         FieldType: 2
         Value: {fileID: 21300000, guid: 7916dc31f06a30944b0a8b428874c2a5, type: 3}
 --- !u!114 &5955973097012507014
@@ -146,83 +146,83 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ThemeAsset: {fileID: 11400000}
   Keys:
-  - rid: 4729522007312171019
-  - rid: 4729522007312171020
-  - rid: 4729522007312171021
-  - rid: 4729522007312171022
-  - rid: 4729522007312171023
-  - rid: 4729522007312171024
-  - rid: 4729522007312171025
-  - rid: 4729522007312171026
-  - rid: 4729522007312171027
-  - rid: 4729522007312171028
-  - rid: 4729522007312171029
+  - rid: 4729522007312171033
+  - rid: 4729522007312171035
+  - rid: 4729522007312171037
+  - rid: 4729522007312171039
+  - rid: 4729522007312171041
+  - rid: 4729522007312171043
+  - rid: 4729522007312171045
+  - rid: 4729522007312171047
+  - rid: 4729522007312171049
+  - rid: 4729522007312171051
+  - rid: 4729522007312171053
   references:
     version: 2
     RefIds:
-    - rid: 4729522007312171019
+    - rid: 4729522007312171033
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorBG
+        Name: BG
         FieldType: 0
-        Value: {r: 0.8745098, g: 0.89411765, b: 0.91764706, a: 1}
-    - rid: 4729522007312171020
+        Value: {r: 0.94509804, g: 0.9490196, b: 0.9647059, a: 1}
+    - rid: 4729522007312171035
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorPanel
+        Name: Panel
         FieldType: 0
         Value: {r: 1, g: 1, b: 1, a: 1}
-    - rid: 4729522007312171021
+    - rid: 4729522007312171037
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorHeader
+        Name: Header
         FieldType: 0
-        Value: {r: 0.80784315, g: 0.8392157, b: 0.8784314, a: 1}
-    - rid: 4729522007312171022
+        Value: {r: 0.8745098, g: 0.89411765, b: 0.91764706, a: 1}
+    - rid: 4729522007312171039
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorButton
+        Name: Button
         FieldType: 0
         Value: {r: 0.4392157, g: 0.6313726, b: 1, a: 1}
-    - rid: 4729522007312171023
+    - rid: 4729522007312171041
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorBodyText
+        Name: BodyText
         FieldType: 0
         Value: {r: 0.18431373, g: 0.20784314, b: 0.25882354, a: 1}
-    - rid: 4729522007312171024
+    - rid: 4729522007312171043
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: ColorHeaderText
+        Name: HeaderText
         FieldType: 0
         Value: {r: 0.18431373, g: 0.20784314, b: 0.25882354, a: 1}
-    - rid: 4729522007312171025
+    - rid: 4729522007312171045
       type: {class: FontKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: FontHeader
+        Name: Header
         FieldType: 1
         Value: {fileID: 11400000, guid: 0ad11aca50b63134da3542c47777f9b0, type: 2}
-    - rid: 4729522007312171026
+    - rid: 4729522007312171047
       type: {class: FontKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: FontBody
+        Name: Body
         FieldType: 1
         Value: {fileID: 11400000, guid: 62d2e5bdd9c24fc46a56b961e7f7e9b2, type: 2}
-    - rid: 4729522007312171027
+    - rid: 4729522007312171049
       type: {class: SpriteKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: SpriteBG
+        Name: BG
         FieldType: 2
         Value: {fileID: 21300000, guid: d42b3be04a2b9164bacaad5a2a12f02d, type: 3}
-    - rid: 4729522007312171028
+    - rid: 4729522007312171051
       type: {class: SpriteKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: SpritePanel
+        Name: Panel
         FieldType: 2
         Value: {fileID: 21300000, guid: 1d8808999492a6a42a528c0e18de2319, type: 3}
-    - rid: 4729522007312171029
+    - rid: 4729522007312171053
       type: {class: SpriteKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
-        Name: SpriteButton
+        Name: Button
         FieldType: 2
         Value: {fileID: 21300000, guid: 066915fd29e279642aa336cf8216bb7d, type: 3}
