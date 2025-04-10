@@ -135,7 +135,7 @@ namespace ThematicUI
                     if (!foldoutStates.ContainsKey(group.Key))
                         foldoutStates[group.Key] = true;
 
-                    foldoutStates[group.Key] = EditorGUILayout.Foldout(foldoutStates[group.Key], $"▶ {group.Key}", true);
+                    foldoutStates[group.Key] = EditorGUILayout.Foldout(foldoutStates[group.Key], $"{group.Key}", true);
 
                     if (foldoutStates[group.Key])
                     {
