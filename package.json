@@ -9,9 +9,9 @@
   },
   "samples": [
     {
-      "displayName": "Example",
-      "description": "",
-      "path": "Example"
+      "displayName": "Thematic UI Sample",
+      "description": "Demonstrates how to apply themes at runtime using Thematic UI. The sample scene includes themed UI elements and a button to switch between available themes.",
+      "path": "Samples~/Example"
     }
   ],
   "keywords": [
