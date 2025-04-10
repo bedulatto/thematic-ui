@@ -131,7 +131,7 @@ MonoBehaviour:
       data:
         Name: Button
         FieldType: 2
-        Value: {fileID: 21300000, guid: 7916dc31f06a30944b0a8b428874c2a5, type: 3}
+        Value: {fileID: 21300000, guid: 066915fd29e279642aa336cf8216bb7d, type: 3}
 --- !u!114 &5955973097012507014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,7 +183,7 @@ MonoBehaviour:
       data:
         Name: Button
         FieldType: 0
-        Value: {r: 0.4392157, g: 0.6313726, b: 1, a: 1}
+        Value: {r: 0.48235294, g: 0.92941177, b: 0.62352943, a: 1}
     - rid: 4729522007312171041
       type: {class: ColorKey, ns: ThematicUI, asm: beijolato.thematic-ui.Runtime}
       data:
@@ -225,4 +225,4 @@ MonoBehaviour:
       data:
         Name: Button
         FieldType: 2
-        Value: {fileID: 21300000, guid: 066915fd29e279642aa336cf8216bb7d, type: 3}
+        Value: {fileID: 21300000, guid: 7916dc31f06a30944b0a8b428874c2a5, type: 3}

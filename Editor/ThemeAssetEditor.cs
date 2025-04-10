@@ -147,59 +147,24 @@ namespace ThematicUI.Editor
                             int i = item.index;
 
                             EditorGUILayout.BeginHorizontal();
-                            bool isEditing = editingIndices.Contains(i);
 
-                            if (isEditing)
+                            EditorGUI.BeginDisabledGroup(true);
+                            EditorGUILayout.TextField(keyRef.Name, GUILayout.MinWidth(150));
+                            EditorGUILayout.EnumPopup(keyRef.Type);
+                            EditorGUI.EndDisabledGroup();
+
+                            GUI.backgroundColor = new Color(1f, 0.4f, 0.4f);
+                            if (GUILayout.Button("Remove", GUILayout.Width(80)))
                             {
-                                if (!editingOriginalNames.ContainsKey(i))
-                                    editingOriginalNames[i] = keyRef.Name;
-
-                                keyRef.Name = EditorGUILayout.TextField(keyRef.Name);
-                                keyRef.Type = (ThemeFieldType)EditorGUILayout.EnumPopup(keyRef.Type);
-
-                                GUI.backgroundColor = new Color(0.2f, 0.8f, 0.2f);
-                                if (GUILayout.Button("Save", GUILayout.Width(60)))
+                                if (EditorUtility.DisplayDialog("Confirm Removal", $"Are you sure you want to remove the key '{keyRef.Name}'?", "Remove", "Cancel"))
                                 {
-                                    editingIndices.Remove(i);
-                                    editingOriginalNames.Remove(i);
+                                    asset.KeyReferences.RemoveAt(i);
                                     SyncAllThemesWithReferences(asset);
+                                    break;
                                 }
-
-                                GUI.backgroundColor = new Color(1f, 0.5f, 0.3f);
-                                if (GUILayout.Button("Discard", GUILayout.Width(80)))
-                                {
-                                    keyRef.Name = editingOriginalNames[i];
-                                    editingIndices.Remove(i);
-                                    editingOriginalNames.Remove(i);
-                                    GUI.FocusControl(null);
-                                }
-
-                                GUI.backgroundColor = Color.white;
                             }
-                            else
-                            {
-                                EditorGUI.BeginDisabledGroup(true);
-                                EditorGUILayout.TextField(keyRef.Name);
-                                EditorGUILayout.EnumPopup(keyRef.Type);
-                                EditorGUI.EndDisabledGroup();
+                            GUI.backgroundColor = Color.white;
 
-                                GUI.backgroundColor = new Color(0.4f, 0.6f, 1f);
-                                if (GUILayout.Button("Edit", GUILayout.Width(60)))
-                                    editingIndices.Add(i);
-
-                                GUI.backgroundColor = new Color(1f, 0.4f, 0.4f);
-                                if (GUILayout.Button("Remove", GUILayout.Width(80)))
-                                {
-                                    if (EditorUtility.DisplayDialog("Confirm Removal", $"Are you sure you want to remove the key '{keyRef.Name}'?", "Remove", "Cancel"))
-                                    {
-                                        asset.KeyReferences.RemoveAt(i);
-                                        SyncAllThemesWithReferences(asset);
-                                        break;
-                                    }
-                                }
-
-                                GUI.backgroundColor = Color.white;
-                            }
                             EditorGUILayout.EndHorizontal();
                         }
                         EditorGUI.indentLevel--;

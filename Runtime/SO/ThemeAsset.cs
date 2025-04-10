@@ -28,7 +28,7 @@ namespace ThematicUI
 
         public void ChangeTheme(Theme newTheme)
         {
-            if (newTheme == null || currentTheme == newTheme) return;
+            if (newTheme == null) return;
             currentTheme = newTheme;
             OnThemeChanged?.Invoke(currentTheme);
         }
