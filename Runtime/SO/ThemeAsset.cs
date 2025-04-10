@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace ThematicUI
 {
     [CreateAssetMenu(fileName = "Theme Asset", menuName = "ThematicUI/Theme Asset")]
     public class ThemeAsset : ScriptableObject
     {
-        public string[] Colors;
-        public string[] Fonts;
-        public string[] Sprites;
+        public List<ThemeKeyReference> KeyReferences = new();
         public Theme[] Themes;
 
         private Theme currentTheme;
@@ -63,19 +66,47 @@ namespace ThematicUI
             ChangeTheme(firstTheme);
         }
 
-        public int GetColorFieldIndex(string name)
+#if UNITY_EDITOR
+        public void SyncAllThemesWithReferences()
         {
-            return Array.IndexOf(Colors, name);
-        }
+            if (Themes == null) return;
 
-        public int GetFontFieldIndex(string name)
-        {
-            return Array.IndexOf(Fonts, name);
-        }
+            string assetPath = AssetDatabase.GetAssetPath(this);
+            string directory = Path.GetDirectoryName(assetPath);
 
-        public int GetSpriteFieldIndex(string name)
-        {
-            return Array.IndexOf(Sprites, name);
+            foreach (var theme in Themes)
+            {
+                if (theme == null) continue;
+
+                // Remove chaves obsoletas
+                theme.Keys.RemoveAll(k => !KeyReferences.Any(r => r.Name == k.Name && r.Type == k.FieldType));
+
+                // Adiciona chaves novas
+                foreach (var refKey in KeyReferences)
+                {
+                    if (!theme.Keys.Any(k => k.Name == refKey.Name && k.FieldType == refKey.Type))
+                    {
+                        ThemeKey newKey = refKey.Type switch
+                        {
+                            ThemeFieldType.Color => new ColorKey(),
+                            ThemeFieldType.Font => new FontKey(),
+                            ThemeFieldType.Sprite => new SpriteKey(),
+                            _ => null
+                        };
+
+                        if (newKey != null)
+                        {
+                            newKey.Name = refKey.Name;
+                            newKey.FieldType = refKey.Type;
+                            theme.Keys.Add(newKey);
+                        }
+                    }
+                }
+
+                EditorUtility.SetDirty(theme);
+            }
+            AssetDatabase.SaveAssets();
         }
+#endif
     }
 }

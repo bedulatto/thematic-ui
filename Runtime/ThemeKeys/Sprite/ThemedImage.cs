@@ -3,14 +3,15 @@ using UnityEngine.UI;
 
 namespace ThematicUI
 {
-    public class ThemedSprite : ThemedElementBase
+    public class ThemedImage : ThemedElementBase
     {
-        [ThemeKey("Sprites")][SerializeField] string spriteKey;
+        [ThemeKey(typeof(SpriteKey))]
+        [SerializeField] string spriteKey;
         [SerializeField] Image spriteTarget;
 
         protected override void ApplyTheme(Theme newTheme)
         {
-            spriteTarget.sprite = newTheme.GetSprite(spriteKey).Sprite;
+            spriteTarget.sprite = newTheme.Get<SpriteKey>(spriteKey).Value;
         }
     }
 }

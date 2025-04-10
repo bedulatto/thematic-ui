@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -10,6 +11,16 @@ namespace ThematicUI
     [CustomPropertyDrawer(typeof(ThemeKeyAttribute))]
     public class ThemeKeyDrawer : PropertyDrawer
     {
+        private static readonly Dictionary<Type, ThemeFieldType> keyTypeToFieldType = new()
+        {
+            { typeof(ColorKey), ThemeFieldType.Color },
+            { typeof(FontKey), ThemeFieldType.Font },
+            { typeof(SpriteKey), ThemeFieldType.Sprite },
+            { typeof(AudioClipKey), ThemeFieldType.Audio },
+            { typeof(MaterialKey), ThemeFieldType.Material },
+            { typeof(TextureKey), ThemeFieldType.Texture },
+        };
+
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             if (property.propertyType != SerializedPropertyType.String)
@@ -19,7 +30,13 @@ namespace ThematicUI
             }
 
             var themeKeyAttribute = attribute as ThemeKeyAttribute;
-            string keyArrayName = themeKeyAttribute.KeyType;
+            var keyType = themeKeyAttribute.KeyType;
+
+            if (!keyTypeToFieldType.TryGetValue(keyType, out ThemeFieldType fieldType))
+            {
+                EditorGUI.HelpBox(position, $"Unsupported key type: {keyType.Name}", MessageType.Warning);
+                return;
+            }
 
             var target = property.serializedObject.targetObject as MonoBehaviour;
             if (target == null)
@@ -35,10 +52,14 @@ namespace ThematicUI
                 return;
             }
 
-            string[] keys = GetKeyArray(themeAsset, keyArrayName);
+            string[] keys = themeAsset.KeyReferences
+                .Where(k => k.Type == fieldType)
+                .Select(k => k.Name)
+                .ToArray();
+
             if (keys == null || keys.Length == 0)
             {
-                EditorGUI.HelpBox(position, $"No keys found for '{keyArrayName}' in ThemeAsset.", MessageType.Info);
+                EditorGUI.HelpBox(position, $"No keys found for '{keyType.Name}' in ThemeAsset.", MessageType.Info);
                 return;
             }
 
@@ -63,15 +84,6 @@ namespace ThematicUI
 
                 type = type.BaseType;
             }
-
-            return null;
-        }
-
-        private string[] GetKeyArray(ThemeAsset asset, string arrayName)
-        {
-            var field = typeof(ThemeAsset).GetField(arrayName, BindingFlags.Public | BindingFlags.Instance);
-            if (field != null && field.GetValue(asset) is string[] keys)
-                return keys;
 
             return null;
         }

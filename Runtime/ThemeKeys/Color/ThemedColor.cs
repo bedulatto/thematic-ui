@@ -5,14 +5,14 @@ namespace ThematicUI
 {
     public class ThemedColor : ThemedElementBase
     {
-        [ThemeKey("Colors")]
+        [ThemeKey(typeof(ColorKey))]
         [SerializeField] private string colorKey;
 
         [SerializeField] private Graphic target;
 
         protected override void ApplyTheme(Theme newTheme)
         {
-            target.color = newTheme.GetColor(colorKey).Color;
+            target.color = newTheme.Get<ColorKey>(colorKey).Value;
         }
     }
 }

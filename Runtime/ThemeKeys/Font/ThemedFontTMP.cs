@@ -5,14 +5,14 @@ namespace ThematicUI
 {
     public class ThemedFontTMP : ThemedElementBase
     {
-        [ThemeKey("Fonts")]
+        [ThemeKey(typeof(FontKey))]
         [SerializeField] private string fontKey;
 
         [SerializeField] private TextMeshProUGUI target;
 
         protected override void ApplyTheme(Theme newTheme)
         {
-            target.font = newTheme.GetFont(fontKey).Font;
+            target.font = newTheme.Get<FontKey>(fontKey).Value;
         }
     }
 }
