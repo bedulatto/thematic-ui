@@ -4,10 +4,10 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace ThematicUI
+namespace ThematicUI.Editor
 {
     [CustomEditor(typeof(ThemeAsset))]
-    public class ThemeAssetEditor : Editor
+    public class ThemeAssetEditor : UnityEditor.Editor
     {
         ThemeAsset asset;
         string newThemeName = "NewTheme";
@@ -119,6 +119,7 @@ namespace ThematicUI
         {
             EditorGUILayout.BeginVertical(separatorStyle);
             DrawHeader("🗝️ Key References", 12);
+            DrawValidationSummary();
 
             if (asset.KeyReferences == null || asset.KeyReferences.Count == 0)
             {
@@ -213,6 +214,61 @@ namespace ThematicUI
             EditorGUILayout.EndVertical();
         }
 
+        void DrawValidationSummary()
+        {
+            var duplicates = asset.KeyReferences
+                .GroupBy(k => new { k.Name, k.Type })
+                .Where(g => !string.IsNullOrWhiteSpace(g.Key.Name) && g.Count() > 1)
+                .ToList();
+
+            bool hasEmptyNames = asset.KeyReferences.Any(k => string.IsNullOrWhiteSpace(k.Name));
+            bool hasMissingInThemes = false;
+
+            if (asset.Themes != null)
+            {
+                foreach (var theme in asset.Themes)
+                {
+                    foreach (var keyRef in asset.KeyReferences)
+                    {
+                        bool exists = theme.Keys.Any(k => k.Name == keyRef.Name && k.FieldType == keyRef.Type);
+                        if (!exists)
+                        {
+                            hasMissingInThemes = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!hasEmptyNames && duplicates.Count == 0 && !hasMissingInThemes)
+                return;
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.HelpBox("⚠️ Some validation issues were found with your key references:", MessageType.Warning);
+
+            if (hasEmptyNames)
+            {
+                EditorGUILayout.LabelField("• Some keys have empty names.", EditorStyles.miniLabel);
+            }
+
+            if (duplicates.Count > 0)
+            {
+                EditorGUILayout.LabelField("• Duplicate keys with the same type detected:", EditorStyles.miniLabel);
+                foreach (var dup in duplicates)
+                {
+                    EditorGUILayout.LabelField($"    - {dup.Key.Name} ({dup.Key.Type})", EditorStyles.miniLabel);
+                }
+            }
+
+            if (hasMissingInThemes)
+            {
+                EditorGUILayout.LabelField("• Some themes are missing values for defined keys.", EditorStyles.miniLabel);
+            }
+
+            EditorGUILayout.Space(4);
+        }
+
+
         void DrawAddKeyField()
         {
             EditorGUILayout.LabelField("➕ Add New Key Reference", EditorStyles.miniBoldLabel);
@@ -305,7 +361,7 @@ namespace ThematicUI
             SyncAllThemesWithReferences(asset);
         }
 
-        public static void SyncAllThemesWithReferences(ThemeAsset asset)
+        void SyncAllThemesWithReferences(ThemeAsset asset)
         {
             if (asset.Themes == null) return;
 

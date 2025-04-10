@@ -1,10 +1,10 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace ThematicUI
+namespace ThematicUI.Editor
 {
     [CustomEditor(typeof(Theme))]
-    public class ThemeEditor : Editor
+    public class ThemeEditor : UnityEditor.Editor
     {
         private Theme theme;
         private string rename;
