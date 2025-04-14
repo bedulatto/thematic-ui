@@ -104,7 +104,7 @@ namespace ThematicUI.Editor
             selectedCurrentThemeIndex = EditorGUILayout.Popup("Select Theme", selectedCurrentThemeIndex, themeNames);
 
             GUI.backgroundColor = Color.green;
-            if (GUILayout.Button("Apply Current Theme"))
+            if (GUILayout.Button("Apply Theme"))
             {
                 var selected = asset.Themes[selectedCurrentThemeIndex];
                 asset.ChangeTheme(selected);
