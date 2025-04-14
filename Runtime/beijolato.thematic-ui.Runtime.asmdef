@@ -1,5 +1,5 @@
 {
-    "name": "beijolato.thematic-ui.Runtime",
+    "name": "bedulatto.thematic-ui.Runtime",
     "references": [
         "Unity.TextMeshPro"
     ],

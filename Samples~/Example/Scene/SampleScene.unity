@@ -546,7 +546,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 241a323f2746a8e49b59ea85c856a68c, type: 2}
-        m_TargetAssemblyTypeName: ThematicUI.ThemeAsset, beijolato.thematic-ui.Runtime
+        m_TargetAssemblyTypeName: ThematicUI.ThemeAsset, bedulatto.thematic-ui.Runtime
         m_MethodName: ChangeToNextTheme
         m_Mode: 1
         m_Arguments:

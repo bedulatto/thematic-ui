@@ -1,5 +1,5 @@
 {
-  "name": "beijolato.thematic-ui",
+  "name": "bedulatto.thematic-ui",
   "version": "1.0.3",
   "displayName": "Thematic UI",
   "description": "Framework for UI Theme management.",
@@ -20,7 +20,7 @@
     "Thematic-UI"
   ],
   "author": {
-    "name": "beijolato"
+    "name": "bedulatto"
   },
   "type": "library"
 }

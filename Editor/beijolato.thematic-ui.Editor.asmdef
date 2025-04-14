@@ -1,8 +1,8 @@
 {
-    "name": "beijolato.thematic-ui.Editor",
+    "name": "bedulatto.thematic-ui.Editor",
     "rootNamespace": "",
     "references": [
-        "beijolato.thematic-ui.Runtime",
+        "bedulatto.thematic-ui.Runtime",
         "Unity.2D.Sprite.Package.EditorTests"
     ],
     "includePlatforms": [
