@@ -186,7 +186,7 @@ namespace ThematicUI.Editor
                 .Where(g => !string.IsNullOrWhiteSpace(g.Key.Name) && g.Count() > 1)
                 .ToList();
 
-            bool hasEmptyNames = asset.KeyReferences.Any(k => string.IsNullOrWhiteSpace(k.Name));
+            bool hasEmptyNames = asset.KeyReferences != null && asset.KeyReferences.Any(k => string.IsNullOrWhiteSpace(k.Name));
             bool hasMissingInThemes = false;
 
             if (asset.Themes != null)
