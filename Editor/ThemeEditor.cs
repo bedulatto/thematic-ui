@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace ThematicUI.Editor
@@ -8,7 +10,7 @@ namespace ThematicUI.Editor
     {
         private Theme theme;
         private string rename;
-
+        private Dictionary<ThemeFieldType, bool> foldouts = new();
         private GUIStyle headerStyle;
         private GUIStyle containerStyle;
         private bool stylesInitialized = false;
@@ -42,9 +44,10 @@ namespace ThematicUI.Editor
 
             DrawHeader("🎭 Theme Editor", 16);
             DrawRenameSection();
-
             EditorGUILayout.Space(10);
             DrawThemeKeyList();
+            EditorGUILayout.Space(10);
+            DrawApplyThemeButton();
 
             serializedObject.ApplyModifiedProperties();
 
@@ -112,13 +115,47 @@ namespace ThematicUI.Editor
             }
             else
             {
-                foreach (var key in theme.Keys)
+                var grouped = theme.Keys.GroupBy(k => k.FieldType);
+                foreach (var group in grouped)
                 {
-                    EditorGUILayout.Space(4);
-                    key.DrawField();
+                    if (!foldouts.ContainsKey(group.Key))
+                        foldouts[group.Key] = true;
+
+                    foldouts[group.Key] = EditorGUILayout.Foldout(foldouts[group.Key], group.Key.ToString(), true);
+
+                    if (foldouts[group.Key])
+                    {
+                        EditorGUI.indentLevel++;
+                        foreach (var key in group)
+                        {
+                            EditorGUILayout.Space(4);
+                            key.DrawField();
+                        }
+                        EditorGUI.indentLevel--;
+                    }
+
+                    EditorGUILayout.Space(6);
                 }
             }
 
+            EditorGUILayout.EndVertical();
+        }
+
+        private void DrawApplyThemeButton()
+        {
+            EditorGUILayout.BeginVertical(containerStyle);
+            GUI.backgroundColor = Color.green;
+            if (GUILayout.Button("Apply Theme"))
+            {
+                if (theme.ThemeAsset != null)
+                {
+                    theme.ThemeAsset.ChangeTheme(theme);
+                    EditorUtility.SetDirty(theme.ThemeAsset);
+                    AssetDatabase.SaveAssets();
+                    UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
+                }
+            }
+            GUI.backgroundColor = Color.white;
             EditorGUILayout.EndVertical();
         }
     }
